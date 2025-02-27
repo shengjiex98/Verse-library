@@ -1,7 +1,9 @@
-from verse.parser.parser import ControllerIR
-import numpy as np
-from scipy.integrate import ode, odeint
 import copy
+
+import numpy as np
+from scipy.integrate import solve_ivp
+
+from verse.parser.parser import ControllerIR
 
 
 class BaseAgent:
@@ -14,12 +16,7 @@ class BaseAgent:
     """
 
     def __init__(
-        self,
-        id,
-        code=None,
-        file_name=None,
-        initial_state = None, 
-        initial_mode = None
+        self, id, code=None, file_name=None, initial_state=None, initial_mode=None
     ):
         """
         Constructor of agent base class.
@@ -37,12 +34,13 @@ class BaseAgent:
         self.id = id
         self.init_cont = initial_state
         self.init_disc = initial_mode
-        self.static_parameters = None 
+        self.static_parameters = None
         self.uncertain_parameters = None
 
-    def set_initial(self, initial_state, initial_mode, static_param=None, uncertain_param=None):
-        '''Initialize the states
-        '''
+    def set_initial(
+        self, initial_state, initial_mode, static_param=None, uncertain_param=None
+    ):
+        """Initialize the states"""
         self.set_initial_state(initial_state)
         self.set_initial_mode(initial_mode)
         self.set_static_parameter(static_param)
@@ -64,7 +62,7 @@ class BaseAgent:
     def dynamics(t, state, u):
         raise NotImplementedError()
 
-    def TC_simulate(self, mode, initialSet, time_horizon, time_step, map=None):
+    def TC_simulate(self, mode, initial_set, time_horizon, time_step, map=None):
         # TODO: P1. Should TC_simulate really be part of the agent definition or
         # should it be something more generic?
         # TODO: P2. Looks like this should be a global parameter;
@@ -85,9 +83,9 @@ class BaseAgent:
             map: LaneMap, optional
                 Provided if the map is used
         """
-        y0 = initialSet 
-        t = np.round(np.arange(0.0, time_horizon+time_step/2, time_step), 8)
-        trace = odeint(func = self.dynamics, y0 = y0, t = t, tfirst=True)
-        t = t.reshape((-1,1))
-        trace = np.hstack((t, trace))
+        y0 = initial_set
+        t = np.round(np.arange(0., time_horizon + time_step, time_step), 8)
+        sol = solve_ivp(self.dynamics, [0., time_horizon + time_step], y0, t_eval=t)
+        t = t.reshape((-1, 1))
+        trace = np.hstack((t, sol.y.T))
         return trace
