@@ -74,7 +74,7 @@ class BaseAgent:
         ----------
             mode: str
                 The current mode to simulate
-            initialSet: List[float]
+            initial_set: List[float]
                 The initial condition to perform the simulation
             time_horizon: float
                 The time horizon for simulation
