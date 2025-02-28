@@ -1,13 +1,9 @@
 # Example agent.
-from typing import Tuple, List
 
-import numpy as np
-from scipy.integrate import ode
+import plotly.graph_objects as go
 
 from verse import BaseAgent
-from verse import LaneMap
-from verse.plotter.plotter2D import *
-import plotly.graph_objects as go
+from verse.plotter.plotter2D import go, simulation_tree
 
 
 class BallAgent(BaseAgent):
