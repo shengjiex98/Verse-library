@@ -1,5 +1,6 @@
 import copy
 from enum import Enum, auto
+from pathlib import Path
 
 from verse import Scenario, ScenarioConfig
 from verse.agents.example_agent.ball_agent import BallAgent
@@ -62,7 +63,7 @@ if __name__ == "__main__":
     bouncingBall = Scenario(
         ScenarioConfig(parallel=False)
     )  # scenario too small, parallel too slow
-    BALL_CONTROLLER = "./demo/ball/ball_bounces.py"
+    BALL_CONTROLLER = Path(__file__)
     myball1 = BallAgent("red-ball", file_name=BALL_CONTROLLER)
     myball2 = BallAgent("green-ball", file_name=BALL_CONTROLLER)
     bouncingBall.add_agent(myball1)
