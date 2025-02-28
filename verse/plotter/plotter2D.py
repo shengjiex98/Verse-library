@@ -3,11 +3,13 @@
 '''
 
 from __future__ import annotations
+
 import copy
+from typing import List, Union
+
 import numpy as np
 import plotly.graph_objects as go
-from typing import List, Tuple, Union
-from plotly.graph_objs.scatter import Marker
+
 from verse.analysis.analysis_tree import AnalysisTree, AnalysisTreeNode
 from verse.map.lane_map import LaneMap
 
@@ -136,7 +138,7 @@ def simulation_tree(
                         )
                     )
                     previous_mode[agent_id] = node.mode[agent_id]
-            if node.assert_hits != None and agent_id in node.assert_hits:
+            if node.assert_hits is not None and agent_id in node.assert_hits:
                 fig.add_trace(
                     go.Scatter(
                         x=[trace[-1, x_dim]],
@@ -215,7 +217,7 @@ def simulation_anime(
     """Trail: It gives the animation of the simulation with trail."""
     if isinstance(root, AnalysisTree):
         root = root.root
-    if time_step != None:
+    if time_step is not None:
         num_digit = num_digits(time_step)
     else:
         num_digit = 3
@@ -465,7 +467,7 @@ def simulation_anime(
                         )
                     )
                     previous_mode[agent_id] = node.mode[agent_id]
-            if node.assert_hits != None and agent_id in node.assert_hits:
+            if node.assert_hits is not None and agent_id in node.assert_hits:
                 fig.add_trace(
                     go.Scatter(
                         x=[trace[-1, x_dim]],
@@ -490,7 +492,7 @@ def simulation_anime(
             range=[y_min - scale_factor * (y_max - y_min), y_max + scale_factor * (y_max - y_min)]
         )
     fig.update_layout(legend_title_text="Agent list")
-    if full_trace == True:
+    if full_trace:
         fig = simulation_tree(
             org_root,
             map,
@@ -591,7 +593,7 @@ def reachtube_tree(
                         )
                     )
                     previous_mode[agent_id] = node.mode[agent_id]
-                if node.assert_hits != None and agent_id in node.assert_hits:
+                if node.assert_hits is not None and agent_id in node.assert_hits:
                     fig.add_trace(
                         go.Scatter(
                             x=[trace[-1, x_dim]],
@@ -633,7 +635,7 @@ def reachtube_anime(
     """It gives the animation of the verfication."""
     if isinstance(root, AnalysisTree):
         root = root.root
-    if time_step != None:
+    if time_step is not None:
         num_digit = num_digits(time_step)
     else:
         num_digit = 3
@@ -767,7 +769,7 @@ def reachtube_anime(
                         )
                     )
                     previous_mode[agent_id] = node.mode[agent_id]
-                if node.assert_hits != None and agent_id in node.assert_hits:
+                if node.assert_hits is not None and agent_id in node.assert_hits:
                     fig.add_trace(
                         go.Scatter(
                             x=[trace[-1, x_dim]],
@@ -811,7 +813,7 @@ def reachtube_tree_single(
     if plot_color is None:
         plot_color = colors
     global color_cnt
-    if color == None:
+    if color is None:
         color = list(scheme_dict.keys())[color_cnt]
         color_cnt = (color_cnt + 1) % num_theme
     queue = [root]
@@ -841,7 +843,7 @@ def reachtube_tree_single(
                     showlegend=show_legend,
                 )
             )
-        elif combine_rect == None:
+        elif combine_rect is None:
             max_id = len(trace) - 1
             trace_x_odd = np.array([trace[i][x_dim] for i in range(0, max_id, 2)])
             trace_x_even = np.array([trace[i][x_dim] for i in range(1, max_id + 1, 2)])
@@ -1032,7 +1034,7 @@ def reachtube_tree_single(
 def simulation_tree_single(
     root: Union[AnalysisTree, AnalysisTreeNode],
     agent_id,
-    fig: go.Figure() = go.Figure(),
+    fig: go.Figure = go.Figure(),
     x_dim: int = 1,
     y_dim: int = 2,
     color=None,
@@ -1047,7 +1049,7 @@ def simulation_tree_single(
     color_id = 0
     if plot_color is None:
         plot_color = colors
-    if color == None:
+    if color is None:
         color = list(scheme_dict.keys())[color_cnt]
         color_cnt = (color_cnt + 1) % num_theme
     start_list = []
@@ -1101,7 +1103,7 @@ def simulation_tree_single(
 
 
 def draw_map(
-    map: LaneMap, color="rgba(0,0,0,0.5)", fig: go.Figure() = go.Figure(), fill_type="lines"
+    map: LaneMap, color="rgba(0,0,0,0.5)", fig: go.Figure = go.Figure(), fill_type="lines"
 ):
     """It draws the the map"""
     x_min, x_max = float("inf"), -float("inf")
@@ -1217,7 +1219,7 @@ def draw_map(
                             name="lines",
                         )
                     )
-                elif fill_type == "detailed" and speed_limit != None:
+                elif fill_type == "detailed" and speed_limit is not None:
                     fig.add_trace(
                         go.Scatter(
                             x=trace_x,
@@ -1415,7 +1417,7 @@ def num_digits(val: float):
 # fig.update_traces(line={'width':5})
 
 
-def update_style(fig: go.Figure() = go.Figure()):
+def update_style(fig: go.Figure = go.Figure()):
     # fig.update_traces(line={'width': 3})
     fig.update_layout(
         # paper_bgcolor="rgba(0,0,0,0)",
@@ -1535,7 +1537,7 @@ def reachtube_tree_slice(
                         )
                     )
                     previous_mode[agent_id] = node.mode[agent_id]
-                if node.assert_hits != None and agent_id in node.assert_hits:
+                if node.assert_hits is not None and agent_id in node.assert_hits:
                     fig.add_trace(
                         go.Scatter(
                             x=[trace[-1, x_dim]],
@@ -1581,7 +1583,7 @@ def reachtube_tree_single_slice(
     if plot_color is None:
         plot_color = colors
     global color_cnt
-    if color == None:
+    if color is None:
         color = list(scheme_dict.keys())[color_cnt]
         color_cnt = (color_cnt + 1) % num_theme
     queue = [root]
@@ -1612,7 +1614,7 @@ def reachtube_tree_single_slice(
                     showlegend=show_legend,
                 )
             )
-        elif combine_rect == None:
+        elif combine_rect is None:
             ### may have to modify if statements
             max_id = len(trace) - 1
             trace_x_odd = np.array([trace[i][x_dim] for i in range(0, max_id, 2) if trace[i][0]>=t_lower and trace[i+1][0]<=t_upper])
